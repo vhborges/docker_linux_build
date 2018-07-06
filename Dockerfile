@@ -130,5 +130,9 @@ RUN git clone https://chromium.googlesource.com/breakpad/breakpad && \
     cmake . && \
     make $MAKE_THREADS_CNT dump_syms; exit 0
 
-CMD /TBuild/build_tdesktop.sh
+WORKDIR /TBuild
+
+RUN rm -r tdesktop
+
+CMD ./build_tdesktop.sh
 
