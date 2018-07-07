@@ -10,13 +10,16 @@ ENV TDESKTOP_BRANCH=master
 ENV VERSION=Release
 ENV MAKE_THREADS_CNT=-j8
 
+ARG STAGE="all"
+
 COPY tdesktop/Telegram/Patches /TBuild/tdesktop/Telegram/Patches
 COPY build_tdesktop.sh /TBuild/build_tdesktop.sh
 
 WORKDIR /TBuild/Libraries
 
 # dependencies from PPA repositories
-RUN apt-get update && \
+RUN if [ "$STAGE" = "dependencies1" ] || [ "${STAGE}" = "all" ]; then \
+    apt-get update && \
     apt-get install -qy software-properties-common && \
     add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
     add-apt-repository -y ppa:george-edison55/cmake-3.x && \
@@ -26,9 +29,11 @@ RUN apt-get update && \
     update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 60 && \
     add-apt-repository -y --remove ppa:ubuntu-toolchain-r/test && \
     add-apt-repository -y --remove ppa:george-edison55/cmake-3.x
+    fi
 
 # dependencies from Ubuntu repositories
-RUN apt-get update && \
+RUN if [ "$STAGE" = "dependencies1" ] || [ "${STAGE}" = "all" ]; then \
+    apt-get update && \
     apt-get install -qy \
     autoconf \
     automake \
@@ -75,36 +80,54 @@ RUN apt-get update && \
     xutils-dev \
     yasm cmake \
     zlib1g-dev
+    fi
 
-RUN git clone https://github.com/ericniebler/range-v3
+# range
+RUN if [ "$STAGE" = "dependencies1" ] || [ "${STAGE}" = "all" ]; then \
+    git clone https://github.com/ericniebler/range-v3
+    fi
 
-RUN git clone https://github.com/telegramdesktop/zlib.git && \
+# zlib
+RUN if [ "$STAGE" = "dependencies1" ] || [ "${STAGE}" = "all" ]; then \
+    git clone https://github.com/telegramdesktop/zlib.git && \
     cd zlib && \
     ./configure && \
     make $MAKE_THREADS_CNT && \
     make install
+    fi
 
-RUN git clone https://github.com/xiph/opus && \
+# opus
+RUN if [ "$STAGE" = "dependencies1" ] || [ "${STAGE}" = "all" ]; then \
+    git clone https://github.com/xiph/opus && \
     cd opus && \
     git checkout v1.2.1 && \
     ./autogen.sh && \
     ./configure && \
     make $MAKE_THREADS_CNT && \
     make install
+    fi
 
-RUN git clone https://github.com/01org/libva.git && \
+# libva
+RUN if [ "$STAGE" = "dependencies1" ] || [ "${STAGE}" = "all" ]; then \
+    git clone https://github.com/01org/libva.git && \
     cd libva && \
     ./autogen.sh --enable-static && \
     make $MAKE_THREADS_CNT && \
     make install
+    fi
 
-RUN git clone git://anongit.freedesktop.org/vdpau/libvdpau && \
+# libvdpau
+RUN if [ "$STAGE" = "dependencies1" ] || [ "${STAGE}" = "all" ]; then \
+    git clone git://anongit.freedesktop.org/vdpau/libvdpau && \
     cd libvdpau && \
     ./autogen.sh --enable-static && \
     make $MAKE_THREADS_CNT && \
     make install
+    fi
 
-RUN git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg && \
+# ffmpeg
+RUN if [ "$STAGE" = "dependencies1" ] || [ "${STAGE}" = "all" ]; then \
+    git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg && \
     cd ffmpeg && \
     git checkout release/3.4 && \
     ./configure \
@@ -201,36 +224,51 @@ RUN git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg && \
     && \
     make $MAKE_THREADS_CNT && \
     make install
+    fi
 
-RUN git clone https://git.assembla.com/portaudio.git && \
+# portaudio
+RUN if [ "$STAGE" = "dependencies1" ] || [ "${STAGE}" = "all" ]; then \
+    git clone https://git.assembla.com/portaudio.git && \
     cd portaudio && \
     git checkout 396fe4b669 && \
     ./configure && \
     make $MAKE_THREADS_CNT && \
     make install
+    fi
 
-RUN git clone git://repo.or.cz/openal-soft.git && \
+# openal-soft
+RUN if [ "$STAGE" = "dependencies1" ] || [ "${STAGE}" = "all" ]; then \
+    git clone git://repo.or.cz/openal-soft.git && \
     cd openal-soft && \
     git checkout v1.18 && \
     cd build && \
     cmake -D LIBTYPE:STRING=STATIC .. && \
     make $MAKE_THREADS_CNT && \
     make install
+    fi
 
-RUN git clone https://github.com/openssl/openssl && \
+# openssl
+RUN if [ "$STAGE" = "dependencies1" ] || [ "${STAGE}" = "all" ]; then \
+    git clone https://github.com/openssl/openssl && \
     cd openssl && \
     git checkout OpenSSL_1_0_1-stable && \
     ./config && \
     make $MAKE_THREADS_CNT && \
     make install
+    fi
 
-RUN git clone https://github.com/xkbcommon/libxkbcommon.git && \
+# libxkbcommon
+RUN if [ "$STAGE" = "dependencies1" ] || [ "${STAGE}" = "all" ]; then \
+    git clone https://github.com/xkbcommon/libxkbcommon.git && \
     cd libxkbcommon && \
     ./autogen.sh --disable-x11 && \
     make $MAKE_THREADS_CNT && \
     make install
+    fi
 
-RUN git clone git://code.qt.io/qt/qt5.git qt5_6_2 && \
+# qt
+RUN if [ "$STAGE" = "dependencies2" ] || [ "${STAGE}" = "all" ]; then \
+    git clone git://code.qt.io/qt/qt5.git qt5_6_2 && \
     cd qt5_6_2 && \
     perl init-repository --module-subset=qtbase,qtimageformats && \
     git checkout v5.6.2 && \
@@ -263,13 +301,19 @@ RUN git clone git://code.qt.io/qt/qt5.git qt5_6_2 && \
     && \
     make $MAKE_THREADS_CNT && \
     make install
+    fi
 
-RUN git clone https://chromium.googlesource.com/external/gyp && \
+# gyp
+RUN if [ "$STAGE" = "dependencies2" ] || [ "${STAGE}" = "all" ]; then \
+    git clone https://chromium.googlesource.com/external/gyp && \
     cd gyp && \
     git checkout 702ac58e47 && \
     git apply ../../tdesktop/Telegram/Patches/gyp.diff
+    fi
 
-RUN git clone https://chromium.googlesource.com/breakpad/breakpad && \
+# breakpad
+RUN if [ "$STAGE" = "dependencies2" ] || [ "${STAGE}" = "all" ]; then \
+    git clone https://chromium.googlesource.com/breakpad/breakpad && \
     cd breakpad && \
     git checkout bc8fb886 && \
     git clone https://chromium.googlesource.com/linux-syscall-support src/third_party/lss && \
@@ -284,10 +328,15 @@ RUN git clone https://chromium.googlesource.com/breakpad/breakpad && \
     cd ../../out/Default && \
     cmake . && \
     make $MAKE_THREADS_CNT dump_syms; exit 0
+    fi
 
 WORKDIR /TBuild
 
-RUN rm -r tdesktop
+# remove patches
+RUN if [ "$STAGE" = "dependencies2" ] || [ "${STAGE}" = "all" ]; then \
+    rm -rf tdesktop
+    fi
 
+# build Telegram Desktop on every container run
 CMD ./build_tdesktop.sh
 
