@@ -66,5 +66,5 @@ Usage: `./docker_run.sh [flag <option>]`
 | Flag | Description                                                                                                    | Default | Example                    |
 |------|----------------------------------------------------------------------------------------------------------------|---------|----------------------------|
 | -b   | Branch of the Telegram Desktop repository. If the source code does already exists, the source won't be cloned. | master  | `./docker_run.sh -b dev`   |
-| -v   | Version of the Telegram Desktop. Options available are "Debug" and "Release".                                  | Release | `./docker_run.sh -v Debug` |
+| -v   | Build version of Telegram Desktop. Options available are "Debug" and "Release".                                  | Release | `./docker_run.sh -v Debug` |
 | -m   | Multithreaded make parameter that is used to compile all dependencies and the Telegram Desktop itself.         | -j8     | `./docker_run.sh -m -j4`   |
