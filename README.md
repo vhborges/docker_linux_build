@@ -10,13 +10,17 @@ This repo contains the docker image to build the linux version of Telegram Deskt
 
 1. Build the Docker image (this may take a few hours):
 
-``./build_image.sh``
+```
+./build_image.sh
+```
 
 You can use multi-stage builds here. See the "Multi-stage build" section for more details.
 
 2. Run a new container:
 
-``./docker_run.sh``
+```
+./docker_run.sh
+```
 
 This will clone the repository to your container and build Telegram Desktop.
 You can use flags to set environment variables to the build process. See the "Available flags" section for more details.
@@ -29,11 +33,15 @@ If you wan't to build your own version of Telegram Desktop, mount the folder `/T
 
 If you want to rebuild Telegram Desktop on your builted Docker image, first delete or rename any container named "tdesktop-linux" on your system:
 
-``docker rm tdesktop-linux``
+```
+docker rm tdesktop-linux
+```
 
 or
 
-``docker rename tdesktop-linux NEW_NAME``
+```
+docker rename tdesktop-linux NEW_NAME
+```
 
 Then run steps 2 and 3 from the section above.
 
@@ -41,18 +49,22 @@ Then run steps 2 and 3 from the section above.
 
 - Install the first list of dependencies:
 
-``./build_image.sh dependencies1``
+```
+./build_image.sh dependencies1
+```
 
 - Install the second list of dependencies from the first image:
 
-``./build_image.sh dependencies2``
+```
+./build_image.sh dependencies2
+```
 
 ## Available flags
 
 Usage: `./docker_run.sh [flag <option>]`
 
-| Flag | Description                                                                                                    | Default | Example                    |
-|------|----------------------------------------------------------------------------------------------------------------|---------|----------------------------|
-| -b   | Branch of the Telegram Desktop repository. If the source code does already exists, the source won't be cloned. | master  | `./docker_run.sh -b dev`   |
-| -v   | Version of the Telegram Desktop. Options available are "Debug" and "Release".                                   | Release | `./docker_run.sh -v Debug` |
-| -m   | Multithreaded make parameter that is used to compile all dependencies and the Telegram Desktop itself.         | -j8     | `./docker_run.sh -m -j4`   |
+| Flag | Description                                                                                                    | Default | Example                  |
+|------|----------------------------------------------------------------------------------------------------------------|---------|--------------------------|
+| -b   | Branch of the Telegram Desktop repository. If the source code does already exists, the source won't be cloned. | master  | ./docker_run.sh -b dev   |
+| -v   | Version of the Telegram Desktop. Options available are "Debug" and "Release".                                  | Release | ./docker_run.sh -v Debug |
+| -m   | Multithreaded make parameter that is used to compile all dependencies and the Telegram Desktop itself.         | -j8     | ./docker_run.sh -m -j4   |
