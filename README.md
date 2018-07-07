@@ -1,6 +1,6 @@
 # Docker image to build the linux version of Telegram Desktop
 
-This repo contains the docker image to build the linux version of Telegram Desktop with just a few commands!
+This repo contains the docker image to build the Linux version of Telegram Desktop with just a few commands!
 
 ## Dependencies
 
@@ -27,7 +27,7 @@ You can use flags to set environment variables to the build process. See the "Av
 
 3. The binary will be placed on a new created `bin` folder of the current directory.
 
-If you wan't to build your own version of Telegram Desktop, mount the folder `/TBuild/tdesktop` to your host and place your source into the folder.
+If you want to build your own version of Telegram Desktop, mount the folder `/TBuild/tdesktop` to your host and place your source into the folder.
 
 ## Rebuilding
 
