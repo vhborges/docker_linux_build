@@ -31,7 +31,7 @@ If you wan't to build your own version of Telegram Desktop, mount the folder `/T
 
 ## Later usages
 
-If you want to rebuild Telegram Desktop on your builted Docker image, first delete or rename any container named "tdesktop-linux" on your system:
+If you want to rebuild Telegram Desktop on your existing Docker image, first delete or rename any container named "tdesktop-linux" on your system:
 
 ```
 docker rm tdesktop-linux
